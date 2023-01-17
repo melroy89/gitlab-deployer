@@ -1,6 +1,6 @@
 # GitLab Artifact Deployer
 
-This service will listen for completed GitLab jobs, retrieve the latest artifact and deploy the artifact in the live production environment.
+This service will listen for completed GitLab jobs, retrieves the latest (build) artifact and deploys the artifact on the live production environment.
 
 ## Production
 
