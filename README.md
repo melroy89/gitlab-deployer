@@ -41,19 +41,17 @@ _Note:_ If you instaled Docker Compose manually, the script name is `docker-comp
 
 Add your URL as Webhook in your GitLab project, under: `Settings` -> `Webhooks` in the menu.
 
-Secret token is not required.
-
-Add the public URL towards this GitLab-Telegram bot, be sure to add `/gitlab` to the end of the URL (eg.`https://service.mydomain.com/gitlab`, when bot is running behind a reverse proxy).  
+Add the public URL towards this GitLab Artifact Deployer, be sure to add `/gitlab` to the end of the URL (eg.`https://service.mydomain.com/gitlab`, when the service is running behind a reverse proxy).  
 Since the route ending with `/gitlab` is mapped to the HTTP GitLab POST Webhook events.
 
-Enable the following triggers or the bot will not work as expected:
+Adding a Secret token is **strongly advised**, so you know the request is legitaly coming from the GitLab server.
+
+Enable the following triggers or the service will not work as expected:
 
 - Issues Events
 - Merge Requests Events
 - Pipeline Events
 - Releases Events
-
-Also notice you could _unselect_ the Push events (which is enabled by default).
 
 ## Development
 
@@ -74,5 +72,3 @@ Assuming you already fulfilled the requirements above.
 2. Install the NodeJS depedencies via: `npm install`
 3. Prepare the `.env` (see [.env.example](.env.example) file), like setting the `GITLAB_SECRET_TOKEN` environment variable.
 4. To start the bot by executing: `npm start`
-
-Hint: You can also disable the Telegram integration during testing, set: `TELEGRAM_ENABLED=false` in the `.env` file.
