@@ -1,0 +1,15 @@
+version: "3"
+services:
+  gitlab-deployer:
+    image: danger89/gitlab-deployer:latest
+    container_name: gitlab-deployer
+    restart: always
+    networks:
+      - gitlab_deployer_external_network
+    volumes:
+      - /home/username/folder/to/.env:/app/.env:ro
+    ports:
+      - "127.0.0.1:3042:3042"
+
+networks:
+  gitlab_deployer_external_network:

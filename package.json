@@ -1,0 +1,41 @@
+{
+  "name": "gitlab-bot",
+  "version": "1.1.0",
+  "description": "GitLab bot that interconnect GitLab with Telegram",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "lint": "eslint src --ext .js",
+    "fix": "eslint src --ext .js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.melroy.org:melroy/gitlab-bot.git"
+  },
+  "keywords": [
+    "bot",
+    "telegram",
+    "gitlab",
+    "chat",
+    "issues",
+    "pipeline",
+    "release",
+    "merge requests"
+  ],
+  "author": {
+    "name": "Melroy van den Berg",
+    "email": "melroy@melroy.org"
+  },
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1"
+  }
+}

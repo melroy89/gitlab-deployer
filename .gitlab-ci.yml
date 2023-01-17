@@ -1,0 +1,21 @@
+default:
+  image: node:lts-alpine
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - .npm/
+  
+before_script:
+  - npm ci --cache .npm --prefer-offline
+
+lint:
+  stage: test
+  script:
+  - npm run lint
+
+audit:
+  stage: test
+  allow_failure: true
+  script:
+  - npm audit
