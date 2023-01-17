@@ -1,11 +1,6 @@
-# GitLab-Telegram Bot
+# GitLab Artifact Deployer
 
-This bot will handle the following events and inform you via Telegram about those events:
-
-- Issues opened, re-opened & closed;
-- Merge requests are opened, re-opened, closed or merged;
-- Failing pipelines;
-- New releases.
+This service will listen for completed GitLab jobs, retrieve the latest artifact and deploy the artifact in the live production environment.
 
 ## Production
 
