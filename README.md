@@ -8,13 +8,13 @@ We will first explain how to use this setup in production. See below for running
 
 ### Setup GitLab Artifact Deployer
 
-You now need to set several environment variables, you can use the `.env` file.
+You need to set some settings using environment variables, for that we use the `.env` file. You can use the `.env.example` file as template.
 
 ```sh
 cp .env.example .env
 ```
 
-Adapt the `.env` file to your settings.
+Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN`, see the section below "Adding Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
 
 In production we use Docker, see [docker-compose.yml](docker-compose.yml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
@@ -43,7 +43,7 @@ Add your URL as Webhook in your GitLab project, in your GitLab repository go to:
 Add the public URL towards this GitLab Artifact Deployer, be sure to add `/gitlab` to the end of the URL (eg.`https://service.mydomain.com/gitlab`, when the service is running behind a reverse proxy).  
 Since the route ending with `/gitlab` is mapped to the HTTP GitLab POST Webhook events.
 
-Adding a Secret token is **strongly advised**, so you know the request is legitaly coming from the GitLab server.
+Adding a Secret Token is **strongly advised**, so you know the request is legitaly coming from the GitLab server.
 
 Enable the following triggers or the service will not work as expected:
 

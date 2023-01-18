@@ -9,6 +9,7 @@ function isEmptyObject (obj) {
 router.post('/', (req, res) => {
   res.sendStatus(200)
 
+  // TODO: Check gitlab secret token
   const body = req.body
   if (Object.prototype.hasOwnProperty.call(body, 'object_kind')) {
     switch (body.object_kind) {
