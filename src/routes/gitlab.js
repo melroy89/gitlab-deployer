@@ -1,10 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-function isEmptyObject (obj) {
-  return !Object.keys(obj).length
-}
-
 // Handle GitLab web hook POST calls
 router.post('/', (req, res) => {
   res.sendStatus(200)
