@@ -19,7 +19,7 @@ Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN`, see the se
 In production we use Docker, see [docker-compose.yml](docker-compose.yml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
-_Note:_ If you instaled Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
+_Note:_ If you installed Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
 
 ### Setup a GitLab Job
 
@@ -68,6 +68,6 @@ sudo apt-get install -y nodejs
 Assuming you already fulfilled the requirements above.
 
 1. Clone the project: `git clone git@gitlab.melroy.org:melroy/gitlab-deployer.git`
-2. Install the NodeJS depedencies via: `npm install`
+2. Install the NodeJS dependencies via: `npm install`
 3. Prepare the `.env` (see [.env.example](.env.example) file), like setting the `GITLAB_SECRET_TOKEN` environment variable.
 4. To start the bot by executing: `npm start`
