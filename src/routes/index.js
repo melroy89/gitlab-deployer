@@ -3,7 +3,7 @@ const router = express.Router()
 const gitlabRoute = require('./gitlab')
 
 router.get('/', (req, res) => {
-  res.json({ message: 'Welcome to the GitLab Deployer service' })
+  res.json({ message: 'Welcome to the GitLab Artifact Deployer service' })
 })
   .use('/gitlab', gitlabRoute)
 
