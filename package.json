@@ -1,7 +1,7 @@
 {
-  "name": "gitlab-bot",
-  "version": "1.1.0",
-  "description": "GitLab bot that interconnect GitLab with Telegram",
+  "name": "gitlab-artifact-deployer",
+  "version": "1.0.0",
+  "description": "A service that deploys GitLab artifacts to live production",
   "main": "src/index.js",
   "scripts": {
     "start": "node .",
@@ -10,17 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.melroy.org:melroy/gitlab-bot.git"
+    "url": "git@gitlab.melroy.org:melroy/gitlab-artifact-deployer.git"
   },
   "keywords": [
-    "bot",
-    "telegram",
     "gitlab",
-    "chat",
-    "issues",
-    "pipeline",
-    "release",
-    "merge requests"
+    "artifact",
+    "deployment",
+    "live",
+    "production",
+    "secure"
   ],
   "author": {
     "name": "Melroy van den Berg",
