@@ -8,8 +8,6 @@ We will first explain how to use this setup in production. See below for running
 
 ### Setup GitLab Artifact Deployer
 
-Install the JavaScript dependencies: `npm install`.
-
 You now need to set several environment variables, you can use the `.env` file.
 
 ```sh
@@ -23,11 +21,20 @@ In production we use Docker, see [docker-compose.yml](docker-compose.yml) file t
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
 _Note:_ If you instaled Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
 
-deploy me:
-script: - deploy-to-cats.sh
-environment:
-name: production
-url: https://cats.example.com
+### Setup a GitLab Job
+
+We use a special CI/CD job in GitLab called [Deployment Jobs](https://docs.gitlab.com/ee/ci/jobs/index.html#deployment-jobs).
+
+You need to use the `environment` keyword in order to activate a deployment job. Below an _example_ of such a deploy job, which will trigger our GitLab Artifact Deployer:
+
+```yml
+deploy:
+  script:
+    - deploying.sh
+  environment:
+    name: production
+    url: https://live.production.com
+```
 
 ## Adding Webhook
 
