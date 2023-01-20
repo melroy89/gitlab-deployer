@@ -14,7 +14,19 @@ You need to set some settings using environment variables, for that we use the `
 cp .env.example .env
 ```
 
-Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN`, see the section below "Adding Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
+| Environment Var       | Description                                               | Required |
+| --------------------- | --------------------------------------------------------- | -------- |
+| `GITLAB_SECRET_TOKEN` | GitLab Secret Token                                       | yes      |
+| `GITLAB_HOSTNAME`     | GitLab Host, default: `gitlab.com`                        | no       |
+| `REPO_BRANCH`         | Branch to download artifact from, default: `main`         | no       |
+| `JOB_NAME`            | Job name to download artifact from, default: `deploy`     | no       |
+| `ACCESS_TOKEN`        | Access token, for private repository (not set by default) | no       |
+
+Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN` and `GITLAB_HOSTNAME`, see the section below "Adding Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
+
+_Hint:_ You can create a personal access token at your GitLab profile.
+
+---
 
 In production we use Docker, see [docker-compose.yml](docker-compose.yml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
@@ -45,12 +57,7 @@ Since the route ending with `/gitlab` is mapped to the HTTP GitLab POST Webhook 
 
 Adding a Secret Token is **strongly advised**, so you know the request is legitaly coming from the GitLab server.
 
-Enable the following triggers or the service will not work as expected:
-
-- Issues Events
-- Merge Requests Events
-- Pipeline Events
-- Releases Events
+Finally, check the trigger: "Deployment events"!
 
 ## Development
 
@@ -69,5 +76,5 @@ Assuming you already fulfilled the requirements above.
 
 1. Clone the project: `git clone git@gitlab.melroy.org:melroy/gitlab-deployer.git`
 2. Install the NodeJS dependencies via: `npm install`
-3. Prepare the `.env` (see [.env.example](.env.example) file), like setting the `GITLAB_SECRET_TOKEN` environment variable.
+3. Prepare the `.env` (see [.env.example](.env.example) file), like setting the `GITLAB_SECRET_TOKEN` and `GITLAB_HOSTNAME` environment variables.
 4. To start the bot by executing: `npm start`

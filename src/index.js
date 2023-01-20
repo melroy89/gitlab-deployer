@@ -1,10 +1,15 @@
 require('dotenv').config()
 const port = process.env.PORT || 3042
-
+const secretToken = process.env.GITLAB_SECRET_TOKEN
 const createError = require('http-errors')
 const express = require('express')
 const routes = require('./routes')
 global.ErrorState = false
+
+if ((typeof secretToken === 'undefined') || secretToken === null || secretToken === '') {
+  console.error('ERROR: GitLab Secret Token not provided but is required. Setup an .env file!')
+  process.exit(1)
+}
 
 // Create the Express app
 const app = express()
