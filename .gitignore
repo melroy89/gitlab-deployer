@@ -1,6 +1,9 @@
 # Dot file
 .env
 
+# Zip files
+*.zip
+
 # Logs
 logs
 *.log

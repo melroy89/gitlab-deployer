@@ -14,10 +14,21 @@ router.post('/', (req, res) => {
       switch (body.object_kind) {
         // In case of a deployment job
         case 'deployment': {
+          const status = body.status
           const projectId = body.project.id
-          if (projectId) {
-            console.log(`INFO: Deployment triggered (Project ID: ${projectId})`)
-            download(projectId)
+          if (status) {
+            switch (status) {
+              case 'running':
+                console.log(`INFO: Deployment is running (Project ID: ${projectId})`)
+                break
+              case 'success': {
+                console.log(`INFO: Deployment is successful (Project ID: ${projectId}), starting download`)
+                download(projectId)
+                break
+              }
+            }
+          } else {
+            console.warn('WARN: Missing deployment status?')
           }
         }
           break
