@@ -41,7 +41,8 @@ In production we use Docker Compose, see [compose.yaml](compose.yaml) file to st
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
 _Note:_ If you installed Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
 
-Be sure your `/folder/to/deploy` on your host system has the correct permissions, the Docker container is running user `node`, which has UID: 1000 with GID: 1000.  
+Be sure your `./dest` destination folder on your host system is created and has the **correct permissions**, which has UID: 1000 and GID: 1000: `sudo chown 1000:1000 -R ./dest/`
+
 Otherwise the GitLab Artifact Deployer is unable to extract the downloaded artifact archive to your system.
 
 ---
@@ -49,10 +50,10 @@ Otherwise the GitLab Artifact Deployer is unable to extract the downloaded artif
 Instead of using Docker Compose, you could also use `docker run` but that is **not** advised. Anyway, here is an example of docker run:
 
 ```sh
-docker run -it -v $(pwd)/.env:/app/.env -v $(pwd)/deployment_folder:/app/dest -p 3042:3042  --rm danger89/gitlab-deployer:latest
+docker run -it -v $(pwd)/.env:/app/.env -v $(pwd)/deployment:/app/dest -p 3042:3042  --rm danger89/gitlab-deployer:latest
 ```
 
-_Note:_ Be sure you set the correct rights to the `deployment_folder` folder (UID: 1000, GUID: 1000).
+_Note:_ Be sure you set the correct rights to the `deployment` folder (UID: 1000, GUID: 1000): `sudo chown 1000:1000 -R ./deployment/`
 
 #### Setup a GitLab Job
 

@@ -7,10 +7,14 @@ services:
     networks:
       - gitlab_deployer_external_network
     volumes:
-      - /home/username/folder/to/.env:/app/.env:ro
-      - /folder/to/deploy:/app/dest
+      # Mount the local .env and dest folder (create a local dest folder first or update to another destination folder)
+      # Be sure the destination host folder as the correct rights under Linux (UID: 1000 and GID 1000)
+      - ./.env:/app/.env:ro
+      - ./dest:/app/dest
     ports:
-      - "127.0.0.1:3042:3042"
+      # If your service is running behind Nginx, you can make the service only lisen on localhost
+      # using: "127.0.0.1:3042:3042"
+      - "3042:3042"
 
 networks:
   gitlab_deployer_external_network:
