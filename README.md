@@ -34,7 +34,9 @@ _Hint:_ You can create a personal access token at your GitLab profile.
 
 #### Docker Compose
 
-In production we use Docker, see [compose.yaml](compose.yaml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
+You can use the [prebuild Docker image from Dockerhub](https://hub.docker.com/r/danger89/gitlab-deployer). Optionally, build your own Docker image using the [Dockerfile](Dockerfile).
+
+In production we use Docker Compose, see [compose.yaml](compose.yaml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
 _Note:_ If you installed Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
