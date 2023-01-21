@@ -19,10 +19,16 @@ router.post('/', (req, res) => {
           if (status) {
             switch (status) {
               case 'running':
-                console.log(`INFO: Deployment is running (Project ID: ${projectId})`)
+                console.log(`INFO: Deployment job is running (Project ID: ${projectId})`)
+                break
+              case 'failed':
+                console.log(`INFO: Deployment job failed (Project ID: ${projectId})`)
+                break
+              case 'canceled':
+                console.log(`INFO: Deployment job is canceled (Project ID: ${projectId})`)
                 break
               case 'success': {
-                console.log(`INFO: Deployment is successful (Project ID: ${projectId}), starting download`)
+                console.log(`INFO: Deployment job is successful (Project ID: ${projectId}), starting download`)
                 download(projectId)
                 break
               }
