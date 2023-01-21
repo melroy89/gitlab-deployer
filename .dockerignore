@@ -2,8 +2,8 @@
 
 node_modules/
 scripts/
-tmp/*/*
 dest/
+tmp/
 
 .git/
 .vscode/

@@ -8,6 +8,8 @@ We will first explain how to use this setup in production. See below for running
 
 ### Setup GitLab Artifact Deployer
 
+#### Environment variables options
+
 You need to set some settings using environment variables, for that we use the `.env` file. You can use the `.env.example` file as template.
 
 ```sh
@@ -30,14 +32,27 @@ _Hint:_ You do **NOT** need to change the `DESTINATION_PATH` environment variabl
 
 _Hint:_ You can create a personal access token at your GitLab profile.
 
----
+#### Docker Compose
 
 In production we use Docker, see [compose.yaml](compose.yaml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
 _Note:_ If you installed Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.
 
-### Setup a GitLab Job
+Be sure your `/folder/to/deploy` on your host system has the correct permissions, the Docker container is running user `node`, which has UID: 1000 with GID: 1000.  
+Otherwise the GitLab Artifact Deployer is unable to extract the downloaded artifact archive to your system.
+
+---
+
+Instead of using Docker Compose, you could also use `docker run` but that is **not** advised. Anyway, here is an example of docker run:
+
+```sh
+docker run -it -v $(pwd)/.env:/app/.env -v $(pwd)/deployment_folder:/app/dest -p 3042:3042  --rm danger89/gitlab-deployer:latest
+```
+
+_Note:_ Be sure you set the correct rights to the `deployment_folder` folder (UID: 1000, GUID: 1000).
+
+#### Setup a GitLab Job
 
 We use a special CI/CD job in GitLab called [Deployment Jobs](https://docs.gitlab.com/ee/ci/jobs/index.html#deployment-jobs).
 
@@ -52,16 +67,18 @@ deploy:
     url: https://live.production.com
 ```
 
-## Adding Webhook
+#### Adding GitLab Webhook
 
 Add your URL as Webhook in your GitLab project, in your GitLab repository go to: `Settings` -> `Webhooks` in the menu.
 
-Add the public URL towards this GitLab Artifact Deployer, be sure to add `/gitlab` to the end of the URL (eg.`https://service.mydomain.com/gitlab`, when the service is running behind a reverse proxy).  
+Add the public URL towards this GitLab Artifact Deployer, be sure to add `/gitlab` to the end of the URL (eg.`https://service.mydomain.com/gitlab`).  
 Since the route ending with `/gitlab` is mapped to the HTTP GitLab POST Webhook events.
 
-Adding a Secret Token is **strongly advised**, so you know the request is legitaly coming from the GitLab server.
+If you are _testing locally_ on your LAN network, you can set the webhook URL to: `http://<your_internal_ip>:3042/gitlab` (disable SSL verification in this case). However, it's advised to run this service behind a reverse proxy like Nginx with proper SSL/TLS encrypted connection.
 
-Finally, check the trigger: "Deployment events"!
+Adding a Secret Token is **required** for security reasons, so you know the request is legitimately coming from the GitLab server.
+
+Finally, check the trigger: "Deployment events" where the webhook should then trigger on.
 
 ## Development
 

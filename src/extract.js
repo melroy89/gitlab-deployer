@@ -13,6 +13,7 @@ class Extract {
     // Extract zip; override target files + keep original permissions
     // User can mount this destination folder (/app/dest) to another location using Docker volume mount
     zip.extractAllTo(DESTINATION_PATH, true, true)
+    console.log('INFO: Zip file successfully extracted')
   }
 }
 
