@@ -2,7 +2,8 @@
 
 node_modules/
 scripts/
-download/
+tmp/*/*
+dest/
 
 .git/
 .vscode/

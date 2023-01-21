@@ -14,21 +14,25 @@ You need to set some settings using environment variables, for that we use the `
 cp .env.example .env
 ```
 
-| Environment Var       | Description                                               | Required |
-| --------------------- | --------------------------------------------------------- | -------- |
-| `GITLAB_SECRET_TOKEN` | GitLab Secret Token                                       | yes      |
-| `GITLAB_HOSTNAME`     | GitLab Host, default: `gitlab.com`                        | no       |
-| `REPO_BRANCH`         | Branch to download artifact from, default: `main`         | no       |
-| `JOB_NAME`            | Job name to download artifact from, default: `deploy`     | no       |
-| `ACCESS_TOKEN`        | Access token, for private repository (not set by default) | no       |
+| Environment Var       | Description                                                                          | Required |
+| --------------------- | ------------------------------------------------------------------------------------ | -------- |
+| `GITLAB_SECRET_TOKEN` | GitLab Secret Token                                                                  | yes      |
+| `GITLAB_HOSTNAME`     | GitLab Host, default: `gitlab.com`                                                   | no       |
+| `REPO_BRANCH`         | Branch to download artifact from, default: `main`                                    | no       |
+| `JOB_NAME`            | Job name to download artifact from, default: `deploy`                                | no       |
+| `ACCESS_TOKEN`        | Access token, for private repository (not set by default)                            | no       |
+| `DESTINATION_PATH`    | Destination path where the artifact zip content is extracted, default: `dest` folder | no       |
+| `TEMP_FOLDER`         | Temporarily file path where the artifact zip is stored, default: `tmp` folder        | no       |
 
 Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN` and `GITLAB_HOSTNAME`, see the section below "Adding Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
+
+_Hint:_ You do **NOT** need to change the `DESTINATION_PATH` environment variable (nor the `TEMP_FOLDER`). Instead try to leverage Docker volume mounting feature. So mount your host destination path to the `/app/dest` container path, see example in [compose.yaml](compose.yaml).
 
 _Hint:_ You can create a personal access token at your GitLab profile.
 
 ---
 
-In production we use Docker, see [docker-compose.yml](docker-compose.yml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
+In production we use Docker, see [compose.yaml](compose.yaml) file to start the Docker container leveraging Docker Compose. It's advised to run the service behind a reverse proxy (eg. Nginx).
 
 Start the container using: `docker compose up` or start in the background using: `docker compose up -d`.  
 _Note:_ If you installed Docker Compose manually, the script name is `docker-compose` instead of `docker compose`.

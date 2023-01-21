@@ -4,6 +4,9 @@
 # Zip files
 *.zip
 
+# Default zip extract target folder
+dest/
+
 # Logs
 logs
 *.log

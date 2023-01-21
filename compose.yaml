@@ -8,6 +8,7 @@ services:
       - gitlab_deployer_external_network
     volumes:
       - /home/username/folder/to/.env:/app/.env:ro
+      - /folder/to/deploy:/app/dest
     ports:
       - "127.0.0.1:3042:3042"
 
