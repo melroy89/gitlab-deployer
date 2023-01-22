@@ -104,7 +104,7 @@ Finally, check the trigger: "Deployment events" where the webhook should then tr
 
 ### Failed to extract artifact zip file: ENOENT: no such file or directory, chmod
 
-**Solution:** Fix the destination folder access permissions by setting the correct user ID & group ID, using: `sudo chown 1000:1000 ./dest`
+**Solution:** Fix the destination folder access permissions by setting the correct user ID & group ID, using: `sudo chown 1000:1000 -R ./dest`
 
 **Root cause:** Your destination folder has not the correct permissions (eg. root for example)
 
