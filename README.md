@@ -2,7 +2,7 @@
 
 This service will listen for completed GitLab Deployment jobs, retrieves the latest (build) artifact and deploys the artifact on the live production environment.
 
-By default it will try to download the GitLab Artifact from the same deployment job as where the webhook will trigger from. This GitLab Artifact Deployer will use the project ID and job ID from the webhook response body request, and use this information to download the artifact.
+By default GitLab Artifact Deployer will try to download the GitLab Artifact from the same deployment job as where the Webhook was triggered from. Then it will use the project ID and job ID from the webhook response body request. That project ID and job ID is then used to download the artifact file.
 
 If you wish to download the artifact from another git branch and/or from other GitLab job name, set: `USE_JOB_NAME` to `yes`. See "Environment variables options" for all the available options.
 
@@ -20,7 +20,7 @@ You need to set some settings using environment variables, for that we use the `
 cp .env.example .env
 ```
 
-See below for all the avaialble options, only the `GITLAB_SECRET_TOKEN` environment variable is actually mandatory
+See below for all the available options, only the `GITLAB_SECRET_TOKEN` environment variable is actually mandatory:
 
 | Environment Var       | Description                                                                                        | Required |
 | --------------------- | -------------------------------------------------------------------------------------------------- | -------- |
