@@ -13,6 +13,7 @@ if ((typeof secretToken === 'undefined') || secretToken === null || secretToken 
 
 // Create the Express app
 const app = express()
+app.disable('x-powered-by')
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
