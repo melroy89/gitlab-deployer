@@ -106,7 +106,21 @@ Finally, check the trigger: "Deployment events" where the webhook should then tr
 
 **Solution:** Fix the destination folder access permissions by setting the correct user ID & group ID, using: `sudo chown 1000:1000 -R ./dest`
 
-**Root cause:** Your destination folder has not the correct permissions (eg. root for example)
+**Root cause:** Your destination folder has _incorrect_ permissions (eg. root user for example).
+
+### WARN: Artifact not found!
+
+**Solution 1:** Be sure you add the artifact as part of the deployment job. See "Setup a GitLab Job" section above for an example. Alternavitely, you can also set `USE_JOB_NAME` to `yes` if you wish to use another job name to fetch the artifact from.
+
+**Solution 2:** If your repository is private, be sure to set the `ACCESS_TOKEN`. Otherwise this service is unable to access the artifact.
+
+**Root cause:** Your GitLab Job didn't contain any artifact or the GitLab Artifact Deployer could not access the artifact file.
+
+### WARN: GitLab Secret Token mismatch!
+
+**Solution:** Provide the same secret via `GITLAB_SECRET_TOKEN` as you did during configuring the GitLab Webhook secret token.
+
+**Root cause:** The receiving GitLab secret token from the webhook call is not matching the GitLab secret token you provided with `GITLAB_SECRET_TOKEN`.
 
 ## Development
 
