@@ -100,6 +100,14 @@ Adding a Secret Token is **required** for security reasons, so you know the requ
 
 Finally, check the trigger: "Deployment events" where the webhook should then trigger on.
 
+## FAQ
+
+### Failed to extract artifact zip file: ENOENT: no such file or directory, chmod
+
+**Solution:** Fix the destination folder access permissions by setting the correct user ID & group ID, using: `sudo chown 1000:1000 ./dest`
+
+**Root cause:** Your destination folder has not the correct permissions (eg. root for example)
+
 ## Development
 
 ### Requirements

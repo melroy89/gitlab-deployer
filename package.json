@@ -1,6 +1,6 @@
 {
   "name": "gitlab-artifact-deployer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A service that deploys GitLab artifacts to live production",
   "main": "src/index.js",
   "scripts": {
