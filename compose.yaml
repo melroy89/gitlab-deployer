@@ -10,6 +10,7 @@ services:
       # Mount the local .env and dest folder (create a local dest folder first or update to another destination folder)
       # Be sure the destination host folder as the correct rights under Linux (UID: 1000 and GID 1000)
       - ./.env:/app/.env:ro
+      # If the artifact was stored in a sub-folder (eg. dist), you need to use for example: ./dest:/app/dest/dist
       - ./dest:/app/dest
     ports:
       # If your service is running behind Nginx, you can make the service only lisen on localhost
