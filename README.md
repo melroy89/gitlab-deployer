@@ -2,35 +2,45 @@
 
 This service will listen for completed GitLab Deployment jobs, retrieves the latest (build) artifact and deploys the artifact on the live production environment.
 
+By default it will try to download the GitLab Artifact from the same deployment job as where the webhook will trigger from. This GitLab Artifact Deployer will use the project ID and job ID from the webhook response body request, and use this information to download the artifact.
+
+If you wish to download the artifact from another git branch and/or from other GitLab job name, set: `USE_JOB_NAME` to `yes`. See "Environment variables options" for all the available options.
+
 ## Production
 
-We will first explain how to use this setup in production. See below for running a development setup.
+We will first explain how to use this setup in production. See at the bottom of the readme for running this project in a development setup.
 
 ### Setup GitLab Artifact Deployer
 
 #### Environment variables options
 
-You need to set some settings using environment variables, for that we use the `.env` file. You can use the `.env.example` file as template.
+You need to set some settings using environment variables, for that we use the `.env` file. You can use the [.env.example](.env.example) file as template:
 
 ```sh
 cp .env.example .env
 ```
 
-| Environment Var       | Description                                                                          | Required |
-| --------------------- | ------------------------------------------------------------------------------------ | -------- |
-| `GITLAB_SECRET_TOKEN` | GitLab Secret Token                                                                  | yes      |
-| `GITLAB_HOSTNAME`     | GitLab Host, default: `gitlab.com`                                                   | no       |
-| `REPO_BRANCH`         | Branch to download artifact from, default: `main`                                    | no       |
-| `JOB_NAME`            | Job name to download artifact from, default: `deploy`                                | no       |
-| `ACCESS_TOKEN`        | Access token, for private repository (not set by default)                            | no       |
-| `DESTINATION_PATH`    | Destination path where the artifact zip content is extracted, default: `dest` folder | no       |
-| `TEMP_FOLDER`         | Temporarily file path where the artifact zip is stored, default: `tmp` folder        | no       |
+See below for all the avaialble options, only the `GITLAB_SECRET_TOKEN` environment variable is actually mandatory
 
-Adapt the `.env` file to your settings for the `GITLAB_SECRET_TOKEN` and `GITLAB_HOSTNAME`, see the section below "Adding Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
+| Environment Var       | Description                                                                                        | Required |
+| --------------------- | -------------------------------------------------------------------------------------------------- | -------- |
+| `GITLAB_SECRET_TOKEN` | GitLab Secret Token, which is **required** for safety reasons.                                     | yes      |
+| `GITLAB_HOSTNAME`     | GitLab Host, default: `gitlab.com`                                                                 | no       |
+| `USE_JOB_NAME`        | Instead of Job ID from the webhook body request, use job name and branch name (not set by default) | no       |
+| `PROJECT_ID`          | GitLab Project ID (not set by default), retrieving project ID from webhook body request            | no       |
+| `REPO_BRANCH`         | Branch to download artifact from, default: `main`                                                  | no       |
+| `JOB_NAME`            | Job name to download artifact from, default: `deploy`                                              | no       |
+| `ACCESS_TOKEN`        | Access token, for private repository (not set by default)                                          | no       |
+| `DESTINATION_PATH`    | Destination path where the artifact zip content is extracted, default: `dest` folder               | no       |
+| `TEMP_FOLDER`         | Temporarily file path where the artifact zip is stored, default: `tmp` folder                      | no       |
+
+_Hint:_ Adapt the `.env` file to your settings (eg. `GITLAB_SECRET_TOKEN`), read the section below: "Adding GitLab Webhook". As long as this token will match the token you will give it during the webhook setup, everything should be fine.
+
+_Hint:_ You can set `USE_JOB_NAME` to the string value `yes`, if you wish to retrieve the GitLab artifact using repository branch name (`REPO_BRANCH`) and job name (`JOB_NAME`). By default we use the job ID to fetch the artifact from GitLab. Job ID is retrieved from the webhook body request, similar to how the project ID is retrieved from the body request.
 
 _Hint:_ You do **NOT** need to change the `DESTINATION_PATH` environment variable (nor the `TEMP_FOLDER`). Instead try to leverage Docker volume mounting feature. So mount your host destination path to the `/app/dest` container path, see example in [compose.yaml](compose.yaml).
 
-_Hint:_ You can create a personal access token at your GitLab profile.
+_Hint:_ You can create a personal access token at your GitLab profile, when you need to set `ACCESS_TOKEN` (needed for private repositories).
 
 #### Docker Compose
 
@@ -64,11 +74,18 @@ You need to use the `environment` keyword in order to activate a deployment job.
 ```yml
 deploy:
   script:
-    - deploying.sh
+    - build_code_or_artifact.sh
   environment:
     name: production
-    url: https://live.production.com
+    url: https://yourliveproduction.com
+  artifacts:
+    paths:
+      - ./dist
 ```
+
+_Note:_ In this example the GitLab deployment job is the _same job_ that also stores the artifact, allowing the GitLab Artifact Deployer to use the Job ID from the body response (+ project ID) by default to fetch the GitLab Artifact. If you wish to use another branch and/or job name instead set the `USE_JOB_NAME` environment variable to the string `yes`. Which allows you to set and use the `REPO_BRANCH` and `JOB_NAME` variables.
+
+_Note:_ The deployment job doesn't need to be named `deploy` nor doesn't need to be part of the 'deploy' phase in GitLab. As long as it has the `environment` keyword, it should work.
 
 #### Adding GitLab Webhook
 

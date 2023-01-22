@@ -2,6 +2,7 @@ const gitlabHost = process.env.GITLAB_HOSTNAME || 'gitlab.com'
 const repoBranch = process.env.REPO_BRANCH || 'main'
 const jobName = process.env.JOB_NAME || 'deploy'
 const accessToken = process.env.ACCESS_TOKEN
+const GITLAB_API_PREFIX = '/api/v4'
 const fs = require('fs')
 const https = require('https')
 const path = require('path')
@@ -10,14 +11,24 @@ const TEMP_FOLDER = process.env.TEMP_FOLDER || path.join(__dirname, '..', 'tmp')
 
 class Download {
   /**
-   * Download latest artifact from specific branch and job name (default branch: main and default job name is: deploy)
-   * When the repository is private, please also set ACCESS_TOKEN.
+   * Download latest GitLab artifact using the branch (main) and job name (deploy) by default.
+   * Or when providing a job ID, we will use the job ID to download the latest artifact.
+   *
+   * Important: When it's a private repository please also set the ACCESS_TOKEN environment var.
    * @param {Number} projectId GitLab Project ID
+   * @param {Number} jobId (Optionally) GitLab Job ID, if job ID is missing the artifact will be downloaded using branch + job name
    */
-  static download (projectId) {
+  static download (projectId, jobId = null) {
+    // Using job name by default (if jobId is empty)
+    let apiArtifactPath = `/projects/${projectId}/jobs/artifacts/${repoBranch}/download?job=${jobName}`
+    if (jobId) {
+      // Using job ID
+      apiArtifactPath = `/projects/${projectId}/jobs/${jobId}/artifacts`
+    }
+
     const options = {
       hostname: gitlabHost,
-      path: `/api/v4/projects/${projectId}/jobs/artifacts/${repoBranch}/download?job=${jobName}`
+      path: GITLAB_API_PREFIX.concat(apiArtifactPath)
     }
     if (accessToken) {
       options.headers = {
