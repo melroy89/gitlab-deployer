@@ -18,7 +18,7 @@ class Download {
    * @param {Number} projectId GitLab Project ID
    * @param {Number} jobId (Optionally) GitLab Job ID, if job ID is missing the artifact will be downloaded using branch + job name
    */
-  static download (projectId, jobId = null) {
+  static downloadArtifact (projectId, jobId = null) {
     // Using job name by default (if jobId is empty)
     let apiArtifactPath = `/projects/${projectId}/jobs/artifacts/${repoBranch}/download?job=${jobName}`
     if (jobId) {
@@ -40,24 +40,26 @@ class Download {
       if (res.statusCode && res.statusCode === 200) {
         // Download to '../tmp' folder with filename 'artifact.zip' by default
         const absolutePath = path.join(TEMP_FOLDER, 'artifact.zip')
-        const filePath = fs.createWriteStream(absolutePath)
-        res.pipe(filePath)
-        filePath.on('finish', () => {
-          filePath.close()
-          console.log('INFO: Download Completed')
-          // Unzip artifact.zip
-          try {
-            extract(absolutePath)
-          } catch (err) {
-            if ('message' in err) {
-              console.error('ERROR: Failed to extract artifact zip file: ' + err.message)
-            }
-            if ('stack' in err) {
-              console.error(err.stack)
-            } else {
-              console.error(err)
-            }
+        const file = fs.createWriteStream(absolutePath)
+
+        res.pipe(file).on('error', (err) => {
+          if (err) {
+            console.error('ERROR: Something went wrong during writing the file.')
+            console.error(err)
           }
+          fs.unlink(absolutePath) // Remove file (we don't check the result)
+        })
+
+        file.on('finish', () => {
+          // Close is async
+          file.close((err) => {
+            if (err) {
+              console.error('ERROR: Could not write file to disk!')
+              console.error(err)
+            } else {
+              Download.extractFile(absolutePath)
+            }
+          })
         })
       } else {
         console.warn('WARN: Artifact not found!')
@@ -69,6 +71,23 @@ class Download {
       console.error(err)
     })
   }
+
+  static extractFile (filePath) {
+    console.log('INFO: Download Completed')
+    // Unzip artifact.zip
+    try {
+      extract(filePath)
+    } catch (err) {
+      if ('message' in err) {
+        console.error('ERROR: Failed to extract artifact zip file: ' + err.message)
+      }
+      if ('stack' in err) {
+        console.error(err.stack)
+      } else {
+        console.error(err)
+      }
+    }
+  }
 }
 
-module.exports = Download.download
+module.exports = Download.downloadArtifact

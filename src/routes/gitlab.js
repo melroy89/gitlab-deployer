@@ -2,7 +2,7 @@ const secretToken = process.env.GITLAB_SECRET_TOKEN
 const projectIdOverride = process.env.PROJECT_ID
 const useJobName = process.env.USE_JOB_NAME || 'no'
 const express = require('express')
-const download = require('../download')
+const downloadArtifact = require('../download')
 const router = express.Router()
 
 // Handle GitLab web hook POST call(s)
@@ -36,11 +36,11 @@ router.post('/', (req, res) => {
                 // If we want to use the job name & branch name to download the artifact, we omit the Job ID
                 if (useJobName === 'yes') {
                   console.log(`INFO: Deployment job is successful (Project ID: ${projectId}), starting download`)
-                  download(projectId)
+                  downloadArtifact(projectId)
                 } else {
                   // By default we use the Job ID to fetch the GitLab Artifact
                   console.log(`INFO: Deployment job is successful (Project ID: ${projectId}, Job ID: ${jobId}), starting download`)
-                  download(projectId, jobId)
+                  downloadArtifact(projectId, jobId)
                 }
                 break
               }
