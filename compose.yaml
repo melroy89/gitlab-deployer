@@ -1,9 +1,8 @@
-version: "3"
+version: "3.8"
 services:
   gitlab-deployer:
     image: danger89/gitlab-deployer:latest
     container_name: gitlab-deployer
-    restart: always
     networks:
       - gitlab_deployer_external_network
     volumes:
@@ -16,6 +15,16 @@ services:
       # If your service is running behind Nginx, you can make the service only lisen on localhost
       # using: "127.0.0.1:3042:3042"
       - "3042:3042"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+      resources:
+        limits:
+          cpus: "1"
+          memory: 150M
 
 networks:
   gitlab_deployer_external_network:
