@@ -6,9 +6,11 @@ WORKDIR /app
 COPY package.json package.json
 COPY package-lock.json package-lock.json
 
-RUN npm install --omit=dev
+# Worarkound https://github.com/npm/cli/issues/5900
+RUN npm install --omit=dev && \
+  chown -R node:node node_modules
 
-COPY . .
+COPY --chown=node:node . .
 
 # Create temp folder
 RUN mkdir -p /app/tmp

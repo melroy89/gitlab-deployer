@@ -33,15 +33,19 @@ router.post('/', (req, res) => {
                 console.log(`INFO: Deployment job is canceled (Project ID: ${projectId})`)
                 break
               case 'success': {
-                // If we want to use the job name & branch name to download the artifact, we omit the Job ID
-                if (useJobName === 'yes') {
-                  console.log(`INFO: Deployment job is successful (Project ID: ${projectId}), starting download`)
-                  downloadArtifact(projectId)
-                } else {
+                // Wait 3 seconds, just in case the zipping process is still in progress
+                // (although downloading right away is often not given an issue)
+                setTimeout(() => {
+                  // If we want to use the job name & branch name to download the artifact, we omit the Job ID
+                  if (useJobName === 'yes') {
+                    console.log(`INFO: Deployment job is successful (Project ID: ${projectId}), starting download`)
+                    downloadArtifact(projectId)
+                  } else {
                   // By default we use the Job ID to fetch the GitLab Artifact
-                  console.log(`INFO: Deployment job is successful (Project ID: ${projectId}, Job ID: ${jobId}), starting download`)
-                  downloadArtifact(projectId, jobId)
-                }
+                    console.log(`INFO: Deployment job is successful (Project ID: ${projectId}, Job ID: ${jobId}), starting download`)
+                    downloadArtifact(projectId, jobId)
+                  }
+                }, 3000)
                 break
               }
             }

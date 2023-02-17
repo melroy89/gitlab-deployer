@@ -9,5 +9,6 @@ tmp/
 .vscode/
 .gitlab-ci.yml
 nginx_example.conf
-docker-compose.yml
+compose.yaml
 start_gitlab_bot.sh
+CODEOWNERS
